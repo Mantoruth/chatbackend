@@ -1,41 +1,42 @@
-const { DataTypes } = require('sequelize');
-const sequelize = require('../db').sequelize;
-const { User } = require('./index');
-
+const { DataTypes, Sequelize } = require('sequelize');
+const { sequelize } = require('../db'); // Correctly import sequelize
+const User = require('./User'); // Ensure this path points to the User model
 const Message = sequelize.define('Message', {
   id: {
     type: DataTypes.INTEGER,
     primaryKey: true,
-    autoIncrement: true
+    autoIncrement: true,
   },
-  content: {
-    type: DataTypes.STRING,
-    allowNull: false
+  createdAt: { // Keep camelCase
+    type: DataTypes.DATE,
+    allowNull: false,
+    defaultValue: Sequelize.NOW,
+  },
+  updatedAt: { // Keep camelCase
+    type: DataTypes.DATE,
+    allowNull: false,
+    defaultValue: Sequelize.NOW,
   },
   userId: {
     type: DataTypes.INTEGER,
-    allowNull: false,
+    allowNull: true,
     references: {
-      model: User, // Reference the User model
-      key: 'id'
-    }
+      model: User,
+      key: 'id',
+    },
+    onDelete: 'SET NULL',
   },
-  createdAt: {
-    type: DataTypes.DATE,
-    allowNull: false
+  text: {
+    type: DataTypes.STRING,
+    allowNull: false,
   },
-  updatedAt: {
-    type: DataTypes.DATE,
-    allowNull: false
-  }
-}, {
-  timestamps: true, // Automatically manage createdAt and updatedAt fields
-  underscored: true, // Use snake_case for field names
-  freezeTableName: true, // Don't pluralize table names
-  tableName: 'messages' // Specify the table name
+  content: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
 });
+// Define associations
+Message.belongsTo(User, { foreignKey: 'userId', as: 'user' });
 
-// Define the association (belongsTo)
-Message.belongsTo(User, { foreignKey: 'userId' });
-
+// Export the model
 module.exports = Message;

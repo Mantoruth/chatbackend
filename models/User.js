@@ -1,5 +1,5 @@
 const { DataTypes } = require('sequelize');
-const sequelize = require('../db'); // Ensure this path is correct
+const { sequelize } = require('../db'); // Correctly destructure the sequelize instance
 
 // Define the User model
 const User = sequelize.define('User', {

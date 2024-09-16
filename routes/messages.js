@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { Message } = require('../models'); // Adjust path based on your directory structure
+const { Message } = require('../models/Message'); // Adjust path based on your directory structure
 const multer = require('multer');
 const path = require('path');
 

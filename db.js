@@ -1,16 +1,16 @@
 const { Sequelize } = require('sequelize');
 
 // Database configuration
-const database = 'chatapp';
-const username = 'root'; // Update with your database username
-const password = ''; // Update with your database password
-const host = 'localhost'; // Database host
+const database = process.env.DB_NAME || 'chatapp';
+const username = process.env.DB_USER || 'root';
+const password = process.env.DB_PASSWORD || '';
+const host = process.env.DB_HOST || 'localhost';
 
 // Create a new Sequelize instance
 const sequelize = new Sequelize(database, username, password, {
   host: host,
-  dialect: 'mysql', // Change as needed (e.g., 'postgres', 'sqlite', etc.)
-  logging: console.log, // Enable logging for all queries
+  dialect: 'mysql',
+  logging: console.log, // Log SQL queries to the console
 });
 
 // Test the connection to the database
@@ -20,12 +20,12 @@ const testConnection = async () => {
     console.log('✅ Connection to the database has been established successfully.');
   } catch (error) {
     console.error('❌ Unable to connect to the database:', error);
-    process.exit(1); // Exit the process if the connection fails
+    process.exit(1); // Exit the process if unable to connect
   }
 };
 
-// Execute the connection test
+// Call the connection test function
 testConnection();
 
-// Export the sequelize instance for use in other modules
-module.exports = sequelize; // Only export the sequelize instance
+// Export the sequelize instance
+module.exports = { sequelize }; // Ensure this is an object
